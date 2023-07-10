@@ -7,5 +7,5 @@
     "webUrlRoot": "https://tipitaka.lk/cloud/",
 
     "s3RootFolder": "cloud",
-    "idToInfoFile": "./server/cloud/id-to-info.json"
+    "idToInfoFile": "./server-data/cloud/id-to-info.json"
 }

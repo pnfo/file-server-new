@@ -1,5 +1,5 @@
 
-import { password } from '../passwords.js'
+import { password } from '../../server-data/passwords.js'
 import vkb from 'vkbeautify'
 
 export default defineEventHandler(async (event) => {

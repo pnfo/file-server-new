@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { IndexHandler } from '../index-handler'
 const profile = process.env.PROFILE || 'library', 
-    serverRoot = 'server' // when running prod with "node .output/server/index.mjs"
+    serverRoot = 'server-data' // when running prod with "node .output/server/index.mjs"
 
 export default defineNitroPlugin(async (nitroApp) => {
     console.log(`Nitro plugin init index with profile ${profile}`)

@@ -2,7 +2,7 @@ module.exports = {
     apps: [
     {
       name: "library-new",
-      script: "./server/index.mjs",
+      script: ".output/server/index.mjs",
       env: {
           NITRO_PORT: 8090, // needed
           PROFILE: "library", // needed
@@ -11,7 +11,7 @@ module.exports = {
     },
     {
       name: "cloud-new",
-      script: "./server/index.mjs",
+      script: ".output/server/index.mjs",
       env: {
           NITRO_PORT: 8091, // needed
           PROFILE: "cloud", // needed

@@ -7,6 +7,6 @@
     "webUrlRoot": "https://tipitaka.lk/library/",
 
     "s3RootFolder": "library",
-    "idToInfoFile": "./server/library/id-to-info.json",
+    "idToInfoFile": "./server-data/library/id-to-info.json",
     "displayThumbs": true
 }

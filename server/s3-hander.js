@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, ListObjectsV2Command, 
     HeadObjectCommand, CopyObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
-import {accessKeyId, secretAccessKey} from './passwords.js'
+import {accessKeyId, secretAccessKey} from '../server-data/passwords.js'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 export function parseFileName(fileName) {
