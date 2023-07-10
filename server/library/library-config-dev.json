@@ -1,0 +1,13 @@
+{
+    "fileTypeName": "පොත්",
+    "rootFolderName": "පුස්තකාලය",
+
+    "httpRoot": "/library",
+    "serverPort": 8090,
+    "webUrlRoot": "http://localhost:8090/library/",
+
+    "s3RootFolder": "library",
+    "indexHtmlTemplate": "./library/library-template.html",
+    "idToInfoFile": "./library/id-to-info.json",
+    "displayThumbs": true
+}

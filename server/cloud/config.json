@@ -1,0 +1,11 @@
+{
+    "fileTypeName": "දේශනා",
+    "rootFolderName": "දහම් ගබඩාව",
+
+    "httpRoot": "/cloud",
+    "serverPort": 8091,
+    "webUrlRoot": "https://tipitaka.lk/cloud/",
+
+    "s3RootFolder": "cloud",
+    "idToInfoFile": "./server/cloud/id-to-info.json"
+}

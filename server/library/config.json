@@ -1,0 +1,12 @@
+{
+    "fileTypeName": "පොත්",
+    "rootFolderName": "පුස්තකාලය",
+
+    "httpRoot": "/library",
+    "serverPort": 8090,
+    "webUrlRoot": "https://tipitaka.lk/library/",
+
+    "s3RootFolder": "library",
+    "idToInfoFile": "./server/library/id-to-info.json",
+    "displayThumbs": true
+}

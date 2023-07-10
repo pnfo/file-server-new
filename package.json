@@ -1,0 +1,31 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@types/node": "^18",
+    "nuxt": "^3.6.1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.363.0",
+    "@aws-sdk/s3-request-presigner": "^3.363.0",
+    "@mdi/font": "^7.2.96",
+    "@pinia/nuxt": "^0.4.11",
+    "@pnfo/singlish-search": "^1.2.2",
+    "pinia": "^2.1.4",
+    "sass": "^1.63.6",
+    "vkbeautify": "^0.99.3",
+    "vue-clipboard3": "^2.0.0",
+    "vuetify": "^3.3.7"
+  },
+  "overrides": {
+    "vue": "latest"
+  }
+}
