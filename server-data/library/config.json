@@ -3,10 +3,10 @@
     "rootFolderName": "පුස්තකාලය",
 
     "httpRoot": "/library",
-    "serverPort": 8090,
     "webUrlRoot": "https://tipitaka.lk/library/",
 
     "s3RootFolder": "library",
     "idToInfoFile": "./server-data/library/id-to-info.json",
+    "ogImage": "https://tipitaka.lk/library/og-library-500x300.jpg",
     "displayThumbs": true
 }

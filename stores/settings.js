@@ -39,11 +39,12 @@ export const useSettingsStore = defineStore('settings-parent', () => {
         darkMode: true,
         sortBy: [], // of this type [{ key: 'name', order: 'asc' }]
         fontSize: 0, // use as fontSize: 18 + state.fontSize + 'px'
+        drawer: false,
     }), snackbar = reactive({model: false})
 
     const config = reactive({}), indexStats = reactive({})
     async function loadConfig() {
-        const {data} = await useFetch(`/api/config`)
+        const { data } = await useFetch(`/api/config`)
         Object.assign(config, data.value.config)
         Object.assign(indexStats, data.value.indexStats)
         //console.log(config)

@@ -2,7 +2,7 @@
 
 import { useSettingsStore } from '@/stores/settings'
 import { getSeoTags, copyClipboard } from '@/stores/utils'
-const settingsStore = useSettingsStore(), route = useRoute()
+const settingsStore = useSettingsStore(), route = useRoute(), config = useSettingsStore().config
 
 const query = route.params.searchQuery.trim(), maxResults = 50
 // immediate and refresh needed below due to bug here https://github.com/nuxt/nuxt/issues/13805#issuecomment-1397317216
@@ -17,14 +17,14 @@ await refresh()
 
 const entries = computed(() => data.value.entries || [])
 
-useSeoMeta(getSeoTags(`“${query}” සෙවුමේ ප්‍රතිඵල`, `“${query}” යන සෙවුම සඳහා ගැළපෙන ගොනු - Buddhist Library`))
+useSeoMeta(getSeoTags(`“${query}” සෙවුමේ ප්‍රතිඵල`, `“${query}” යන සෙවුම සඳහා ගැළපෙන ගොනු - tipitaka.lk බෞද්ධ ${config.rootFolderName}.`))
 
 
 const searchStatus = computed(() => {
   if (data.value.errorMessage) {
     return { text: `ඔබ විසින් ඇතුලු කළ සෙවුම් පදයේ වරදක් ඇත. ${data.value.errorMessage}`, type: 'error' }
   } else if (entries.value.length == 0) {
-    return { text: `“${query}” යන සෙවුම සඳහා ගැළපෙන ගොනු පුස්තකාලයේ අඩංගු නොවේ.`, type: 'error' }
+    return { text: `“${query}” යන සෙවුම සඳහා ගැළපෙන ගොනු ${config.rootFolderName}ේ අඩංගු නොවේ.`, type: 'error' }
   } else if (maxResults > entries.value.length) {
     return { text: `“${query}” යන සෙවුම සඳහා ගැළපෙන ගොනු ${entries.value.length} ක් හමුවිය.`, type: 'success' }
   } else {

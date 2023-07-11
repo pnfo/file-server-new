@@ -20,8 +20,8 @@ export default defineNuxtConfig({
 
     // Public keys that are exposed to the client
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
-      baseURL: process.env.NUXT_PUBLIC_BASE_URL || '/',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api', // not used
+      baseURL: process.env.NUXT_APP_BASE_URL || '', // not used
     },
   },
   nitro: {

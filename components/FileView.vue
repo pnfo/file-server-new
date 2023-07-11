@@ -6,7 +6,8 @@ const props = defineProps({
     file: Object
 })
 const file = props.file, config = useSettingsStore().config
-const sizeInfo = getSizeInfo(file.Size), typeInfo = getTypeInfo(file.type), downloadLink = `/${file.id}/download`
+// can also use runtimeConfig.app.baseURL
+const sizeInfo = getSizeInfo(file.Size), typeInfo = getTypeInfo(file.type), downloadLink = `${config.appBaseUrl}/${file.id}/download`
 function formatNumber(num) {
     return num ? num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '';
 }

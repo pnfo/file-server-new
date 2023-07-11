@@ -3,9 +3,9 @@
     "rootFolderName": "දහම් ගබඩාව",
 
     "httpRoot": "/cloud",
-    "serverPort": 8091,
     "webUrlRoot": "https://tipitaka.lk/cloud/",
 
     "s3RootFolder": "cloud",
-    "idToInfoFile": "./server-data/cloud/id-to-info.json"
+    "idToInfoFile": "./server-data/cloud/id-to-info.json",
+    "ogImage": "https://tipitaka.lk/cloud/og-cloud-500x300.png"
 }

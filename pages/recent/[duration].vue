@@ -1,6 +1,7 @@
 <script setup>
 import { useSettingsStore } from '@/stores/settings'
-const settingsStore = useSettingsStore(), route = useRoute()
+import { getSeoTags } from '@/stores/utils'
+const settingsStore = useSettingsStore(), route = useRoute(), config = settingsStore.config
 const param = parseInt(route.params.duration.trim())
 const duration = ref(!isNaN(param) ? param : 90)
 
@@ -9,6 +10,7 @@ const { data, refresh } = await useFetch(`/api/recent?duration=${duration.value 
 await refresh()
 //console.log(data)
 
+useSeoMeta(getSeoTags(`පසුගිය මාස ${duration.value} තුළ අලුතෙන් එකතු කළ ගොනු`, `Newly added recent files, books, recordings - tipitaka.lk බෞද්ධ ${config.rootFolderName}.`))
 </script>
 
 <template>

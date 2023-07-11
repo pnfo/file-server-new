@@ -30,14 +30,14 @@ export function getSizeInfo(size) {
 }
 
 // just a helper function to keep the meta tags in one place
+import { useSettingsStore } from '@/stores/settings'
 export function getSeoTags(title, description, extra) {
     return Object.assign({
         title, description, ogTitle: title, ogDescription: description, 
-        ogImage: 'https://arutha.lk/og-image.jpg'
+        ogImage: useSettingsStore().config.ogImage,
     }, extra)
 }
 
-import { useSettingsStore } from '@/stores/settings'
 // note package.json of vue-clipboard3 need to be changed to "main": "dist/esm/index.js",
 import useClipboard from 'vue-clipboard3'
 export async function copyClipboard(relativeUrl) {

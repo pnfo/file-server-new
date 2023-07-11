@@ -2,16 +2,18 @@
 const route = useRoute()
 import { useSettingsStore } from '@/stores/settings'
 import { getSeoTags, copyClipboard } from '@/stores/utils'
-const settingsStore = useSettingsStore()
+const settingsStore = useSettingsStore(), config = settingsStore.config
 
-const id = route.params.id, data = ref({});
-useSeoMeta(getSeoTags(`“${id}” සෙවුමේ ප්‍රතිඵල`, `“${id}” යන සෙවුම සඳහා ගැළපෙන වචන - අරුත.lk සිංහල ශබ්දකෝෂය.`));
-
+const id = route.params.id
 
 console.log(`calling api with id ${id}`)
-const { data: apiData, refresh } = await useFetch(`/api/entry/${id}`, { immediate: false })
+const { data, refresh } = await useFetch(`/api/entry/${id}`, { immediate: false })
 await refresh()
-data.value = apiData.value
+
+let title = ''
+if (data.value.type == 'coll') title = data.value.folder.name + ' බහාලුම'
+else if (data.value.type == 'file') title = data.value.file.name + ' ගොනුව'
+useSeoMeta(getSeoTags(`${title}`, `${title}ේ අන්තර්ගතය - tipitaka.lk බෞද්ධ ${config.rootFolderName}.`))
 
 // unless the useFetch is called onMounted/nextTick it returns null on the client due to some bug
 onMounted(() => {
@@ -19,14 +21,6 @@ onMounted(() => {
     //     loadData()
     // })
 })
-//console.log(data.value.entries.length)
-
-// const router = useRouter()
-// watch(id, (newId, previous) => {
-//     if (parseInt(newId) && newId) {
-//       router.replace(`/${newId}`) // this will change the addressbar without refreshing the whole page
-//     }
-// })
 </script>
 
 <template>

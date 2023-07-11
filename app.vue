@@ -3,7 +3,7 @@
   <v-layout>
     <v-app-bar density="compact">
         <template v-slot:prepend>
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="primary"></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer" :color="drawer ? 'secondary' : 'primary'"></v-app-bar-nav-icon>
         </template>
 
         <v-spacer></v-spacer>
@@ -12,7 +12,7 @@
         <!-- <v-app-bar-title color="primary" class="app-title">අරුත.lk</v-app-bar-title> -->
 
         <v-spacer></v-spacer>
-        <template v-if="$vuetify.display.smAndUp || drawer">
+        <template v-if="display.smAndUp || drawer">
           <v-divider class="mx-3 align-self-center" length="24" thickness="2" vertical></v-divider>
           <v-btn icon="mdi-home" to="/"></v-btn>
           <v-btn prepend-icon="mdi-new-box" to="/recent/3">අලුත් ගොනු</v-btn>
@@ -56,8 +56,11 @@ const settingsStore = useSettingsStore()
 await settingsStore.loadConfig()
 
 import { useTheme, useDisplay } from 'vuetify'
-const theme = useTheme()
-const drawer = ref(false) //ref(useDisplay().smAndUp)
+const theme = useTheme(), display = ref(useDisplay())
+const drawer = computed({
+  get() { return settingsStore.settings.drawer },
+  set(val) { settingsStore.setSetting('drawer', val) }
+})
 const darkMode = computed({
   get() { return settingsStore.settings.darkMode },
   set(val) { 
