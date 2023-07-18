@@ -29,6 +29,9 @@ export default defineNuxtConfig({
     //  baseName: 'library',
     //  dir: './library' // Relative to `srcDir` (`server/` for nuxt)
     //}]
+    output: {
+      dir: '../output',
+    },
   },
   devtools: { enabled: true }
 })

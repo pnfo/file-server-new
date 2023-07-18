@@ -1,0 +1,8 @@
+# This is a comment in robots.txt
+User-agent: *
+Disallow: /
+
+# Allow Google and Bing crawlers to access the entire website
+User-agent: Googlebot
+User-agent: Bingbot
+Allow: /

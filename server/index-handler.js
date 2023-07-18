@@ -22,6 +22,7 @@ function generateParents(prefix) {
     const parts = prefix.split('/')
     return parts.map((p, i) => ({...parseFileName(p), Key: parts.slice(0, i + 1).join('/')}))
 }
+const fromNowTs = (seconds) => Date.now() + seconds * 1000 
 
 export class IndexHandler {
     constructor(config) {
@@ -30,6 +31,7 @@ export class IndexHandler {
         this.indexLoaded = false
         this.idInfoLastWrite = Date.now()
         this.indexStats = { numFiles: 0, numFolders: 0 }
+        this.signedUrlCache = {}
     }
 
     async incrementDownloads(id) {
@@ -124,5 +126,12 @@ export class IndexHandler {
     async readStream(key) {
         return this.s3Hander.readFile(key)
     }
-    async getSignedUrl(key, expiresIn) { return this.s3Hander.getSignedUrl(key, expiresIn) }
+    async getSignedUrl(key, expiresIn) {
+        // introduce a cache since there are lot of duplicate requests in quick succession - suspect OOM error due to urlsigning
+        if (this.signedUrlCache[key] && this.signedUrlCache[key].expireTime > fromNowTs(10)) // expire more than 10 secs from now
+            return this.signedUrlCache[key].url
+        const url = this.s3Hander.getSignedUrl(key, expiresIn), expireTime = fromNowTs(expiresIn)
+        this.signedUrlCache[key] = {url, expireTime}
+        return url
+    }
 }

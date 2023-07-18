@@ -5,9 +5,9 @@ import vkb from 'vkbeautify'
 export default defineEventHandler(async (event) => {
     const indexH = useNitroApp().indexHandler, query = getQuery(event)
     try {
-        console.log(`received config request with command ${query.command}`)
         
         if (query.command == 'reload') {
+            console.log(`received config request with command ${query.command}`)
             if (query.password != password) {
                 return { errorMessage: `supplied password ${query.password} is not correct.` }
             }

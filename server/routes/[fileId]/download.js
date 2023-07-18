@@ -10,7 +10,7 @@ export default eventHandler(async event => {
         console.log(`download file ${file.id} : ${file.name}.${file.type}`);
         await indexH.incrementDownloads(file.id); // increment download count
 
-        const signedUrl = await indexH.getSignedUrl(file.Key, 600)
+        const signedUrl = await indexH.getSignedUrl(file.Key, 3600)
         //res.redirect(302, signedUrl, () => {});
         return sendRedirect(event, signedUrl, 302)
     } catch(err) { 
