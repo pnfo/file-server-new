@@ -40,8 +40,9 @@ export class IndexHandler {
         await this.checkWriteInfo(false)
     }
     async checkWriteInfo(forceWrite) {
-        if (!this.indexLoaded) return // can't write anything until the index is first loaded
+        if (!this.indexLoaded) return // can't write anything until the index is loaded successfully
         if (forceWrite || this.idInfoLastWrite < Date.now() - 3600 * 1000) { // every one hour write to file
+            if (Object.keys(this.files).length == 0) process.exit(1) // not sure exactly why this happens, but do not write empty info, instead crash and restart
             const idToInfos = {}
             Object.entries(this.files).forEach(([id, {downloads, dateAdded}]) => idToInfos[id] = {downloads, dateAdded})
             await fs.promises.writeFile(this.config.idToInfoFile, vkb.json(JSON.stringify(idToInfos)), 'utf-8')
@@ -51,16 +52,22 @@ export class IndexHandler {
 
     // read s3 completely and download stats and make an index
     async reloadIndex() {
-        const entries = await this.s3Hander.list('', true) // get all
+        let entries
+        try {
+            entries = await this.s3Hander.list('', true) // get all
+        } catch (e) {
+            console.log(`server exiting due to s3 listing failure..`)
+            process.exit(1) // this error is unrecoverable
+        }
 
         await this.checkWriteInfo(true) // make sure to write any updates before reading
         const idToInfos = JSON.parse(fs.readFileSync(this.config.idToInfoFile, 'utf-8'))
+        this.indexLoaded = false // prevent id info being written to file until everything is successfully loaded
         this.folders = {}
         this.files = {}
         
         entries.forEach(e => {
             if (this.files[e.id] || this.folders[e.id]) {
-                this.indexLoaded = false // prevent id info being written to file
                 throw new Error(`duplicate id in ${(this.files[e.id] || this.folders[e.id]).Key} and ${e.Key}. fix and refresh again.`)
             }
             const parents = generateParents(e.prefix), 
@@ -70,7 +77,6 @@ export class IndexHandler {
             parents.forEach(({name, id, Key}) => {
                 const folder = this.folders[id]
                 if (this.files[id] || (folder && folder.Key != Key)) {
-                    this.indexLoaded = false // prevent id info being written to file
                     throw new Error(`duplicate id in ${(this.files[id] || folder).Key} and ${Key}. fix and refresh again.`)
                 }
                 if (folder) {
