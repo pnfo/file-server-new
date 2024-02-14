@@ -22,7 +22,24 @@ function generateParents(prefix) {
     const parts = prefix.split('/')
     return parts.map((p, i) => ({...parseFileName(p), Key: parts.slice(0, i + 1).join('/')}))
 }
-const fromNowTs = (seconds) => Date.now() + seconds * 1000 
+const fromNowTs = (seconds) => Date.now() + seconds * 1000
+
+const memoryThreshold = 300, memoryCheckInterval = 5 // in MB and seconds
+let highMemoryRounds = 0
+function checkMemory() {
+    const memory = process.memoryUsage()
+    const memoryUsage = memory.rss + memory.external;
+    console.log(`Memory Usage Check ${Math.round(memoryUsage / 1024 / 1024)} MB`)
+    if (memoryUsage > memoryThreshold * 1024 * 1024) {
+        highMemoryRounds++
+        if (highMemoryRounds > 5) { // if high memory conseqtively
+            console.error(`Out of memory! Memory usage: ${memoryUsage / 1024 / 1024} MB`);
+            process.exit(1); // Terminate the process with a non-zero exit code
+        }
+    } else {
+        highMemoryRounds = 0
+    }
+}
 
 export class IndexHandler {
     constructor(config) {
@@ -32,6 +49,7 @@ export class IndexHandler {
         this.idInfoLastWrite = Date.now()
         this.indexStats = { numFiles: 0, numFolders: 0 }
         this.signedUrlCache = {}
+        setInterval(checkMemory, memoryCheckInterval * 1000)
     }
 
     async incrementDownloads(id) {
@@ -42,7 +60,6 @@ export class IndexHandler {
     async checkWriteInfo(forceWrite) {
         if (!this.indexLoaded) return // can't write anything until the index is loaded successfully
         if (forceWrite || this.idInfoLastWrite < Date.now() - 3600 * 1000) { // every one hour write to file
-            if (Object.keys(this.files).length == 0) process.exit(1) // not sure exactly why this happens, but do not write empty info, instead crash and restart
             const idToInfos = {}
             Object.entries(this.files).forEach(([id, {downloads, dateAdded}]) => idToInfos[id] = {downloads, dateAdded})
             await fs.promises.writeFile(this.config.idToInfoFile, vkb.json(JSON.stringify(idToInfos)), 'utf-8')
