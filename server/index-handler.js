@@ -33,8 +33,8 @@ function checkMemory() {
     if (memoryUsage > memoryThreshold * 1024 * 1024) {
         highMemoryRounds++
         if (highMemoryRounds > 5) { // if high memory conseqtively
-            console.error(`Out of memory! Memory usage: ${memoryUsage / 1024 / 1024} MB`);
-            process.exit(1); // Terminate the process with a non-zero exit code
+            console.error(`Memory usage over threshold ${memoryThreshold}. Usage: ${memoryUsage / 1024 / 1024} MB`)
+            process.exit(1)
         }
     } else {
         highMemoryRounds = 0
