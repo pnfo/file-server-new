@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     //  dir: './library' // Relative to `srcDir` (`server/` for nuxt)
     //}]
     output: {
-      dir: '../output',
+      dir: 'output',
     },
   },
   devtools: { enabled: true }

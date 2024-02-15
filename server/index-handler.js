@@ -24,16 +24,18 @@ function generateParents(prefix) {
 }
 const fromNowTs = (seconds) => Date.now() + seconds * 1000
 
+// todo: this whole memory check might not be necessary now that the memory leak is fixed after updating the node version and vuetify
 const memoryThreshold = 300, memoryCheckInterval = 5 // in MB and seconds
 let highMemoryRounds = 0
-function checkMemory() {
+async function checkMemory(ih) {
     const memory = process.memoryUsage()
     const memoryUsage = memory.rss + memory.external;
     console.log(`Memory Usage Check ${Math.round(memoryUsage / 1024 / 1024)} MB`)
     if (memoryUsage > memoryThreshold * 1024 * 1024) {
         highMemoryRounds++
         if (highMemoryRounds > 5) { // if high memory conseqtively
-            console.error(`Memory usage over threshold ${memoryThreshold}. Usage: ${memoryUsage / 1024 / 1024} MB`)
+            console.error(`Memory usage over threshold ${memoryThreshold}. Usage: ${Math.round(memoryUsage / 1024 / 1024)} MB`)
+            await ih.checkWriteInfo(true) // force write
             process.exit(1)
         }
     } else {
@@ -49,7 +51,7 @@ export class IndexHandler {
         this.idInfoLastWrite = Date.now()
         this.indexStats = { numFiles: 0, numFolders: 0 }
         this.signedUrlCache = {}
-        setInterval(checkMemory, memoryCheckInterval * 1000)
+        setInterval(() => checkMemory(this), memoryCheckInterval * 1000)
     }
 
     async incrementDownloads(id) {
@@ -64,6 +66,7 @@ export class IndexHandler {
             Object.entries(this.files).forEach(([id, {downloads, dateAdded}]) => idToInfos[id] = {downloads, dateAdded})
             await fs.promises.writeFile(this.config.idToInfoFile, vkb.json(JSON.stringify(idToInfos)), 'utf-8')
             this.idInfoLastWrite = Date.now()
+            console.log(`Wrote index to file at ${(new Date()).toISOString()}`)
         }
     }
 

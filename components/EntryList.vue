@@ -1,5 +1,4 @@
 <script lang="js" setup>
-import { VDataTable } from 'vuetify/labs/VDataTable'
 import { getTypeInfo, getSizeInfo } from '@/stores/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useDisplay } from 'vuetify'
@@ -58,24 +57,24 @@ const sortByStr = computed(() => {
         <TopNav v-if="parents.length" :parents="parents"></TopNav>
 
         <v-data-table density="compact" :items="items" :headers="headers" v-model:sort-by="sortBy"
-            items-per-page="-1" hide-default-footer disable-pagination hover>
+            items-per-page="-1" hide-default-footer disable-pagination hover style="font-size: 1rem;">
             <template v-slot:item.name="{ item }">
-                <v-icon class="mr-2" :color="item.raw.typeInfo.color">{{ item.raw.typeInfo.icon }}</v-icon>
-                <NuxtLink :class="'entry-name ' + item.raw.type" :to="`/${item.raw.id}`">{{ item.raw.name }}</NuxtLink>
+                <v-icon class="mr-2" :color="item.typeInfo.color">{{ item.typeInfo.icon }}</v-icon>
+                <NuxtLink :class="'entry-name ' + item.type" :to="`/${item.id}`">{{ item.name }}</NuxtLink>
                 <span class="entry-details">
-                    <span v-if="item.raw.type == 'coll'">{{ `ගොනු ${item.raw.num_entries} කි.` }}</span>
-                    <span v-else>{{ item.raw.desc }}</span>
+                    <span v-if="item.type == 'coll'">{{ `ගොනු ${item.num_entries} කි.` }}</span>
+                    <span v-else>{{ item.desc }}</span>
                 </span>
             </template>
             <template v-slot:item.Size="{ item }">
-                <span class="mr-2">{{ item.raw.sizeInfo.numeral }}</span>
-                <span :class="'size-unit ' + item.raw.sizeInfo.unit">{{ item.raw.sizeInfo.unit }}</span>
+                <span class="mr-2">{{ item.sizeInfo.numeral }}</span>
+                <span :class="'size-unit ' + item.sizeInfo.unit">{{ item.sizeInfo.unit }}</span>
             </template>
             <template v-slot:item.parent="{ item }">
-                <NuxtLink v-if="item.raw.parent" class="parent-name" :to="`/${item.raw.parent.id}`">{{ item.raw.parent.name }}</NuxtLink>
+                <NuxtLink v-if="item.parent" class="parent-name" :to="`/${item.parent.id}`">{{ item.parent.name }}</NuxtLink>
             </template>
             <template v-slot:item.dateAdded="{ item }">
-                <span style="font-size: 0.9em;">{{ item.raw.dateAdded }}</span>
+                <span style="font-size: 0.9em;">{{ item.dateAdded }}</span>
             </template>
             <template #bottom></template> <!-- needed to hide the pagination -->
         </v-data-table>

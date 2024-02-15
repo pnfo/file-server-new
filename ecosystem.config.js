@@ -13,7 +13,7 @@ module.exports = {
           NITRO_PORT: 8090, 
           PROFILE: "library", 
           NUXT_APP_BASE_URL: "/library", 
-          NODE_OPTIONS: "--max_old_space_size=1024",
+          NODE_OPTIONS: "--max_old_space_size=280", // limit memory allocation to 300MB - more aggresive gc
       },
     },
     {
@@ -23,7 +23,7 @@ module.exports = {
           NITRO_PORT: 8091, 
           PROFILE: "cloud", 
           NUXT_APP_BASE_URL: "/cloud",
-          NODE_OPTIONS: "--max_old_space_size=1024",
+          NODE_OPTIONS: "--max_old_space_size=280",
       },
     }
   ]
