@@ -1,8 +1,8 @@
 
 import fs from 'fs'
 import path from 'path'
-import { S3Handler } from './s3-hander.js'
-import { getTypeInfo } from './vue-handler.js'
+import { S3Handler } from './server/s3-hander.js'
+import { getTypeInfo } from './stores/utils.js'
 import util from 'util'
 import {exec} from 'child_process'
 const runCommand = util.promisify(exec)
@@ -102,5 +102,6 @@ async function recomputeThumbnails(startId, endId = 0, recomputeAll = false) {
  * if a file is downloaded compute the thumb photos, if the recomputeAll is true compute even if not downloaded
  * some thumbs have been manually edited to remove whitespace, so recompute only the new pdfs
  * startId and endId are inclusive
+ * note: have to comment out import settings line in utils
  **/
-recomputeThumbnails(1010, 1010, false)
+recomputeThumbnails(1011, 1047, false)
