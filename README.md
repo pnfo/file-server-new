@@ -28,10 +28,11 @@ Build the application for production:
 # npm
 npm run build
 ```
-* Copy the `.output` directory from the build process to the server
+* Copy the `output` directory from the build process to the server
 * Copy the `server-data` directory to the production server
 * Copy the `ecosystem.config.js` pm2 config file to the server
 * Copy the `passwords.js` file - not in the repo - to the server
+* Reload pm2 `pm2 reload ecosystem.config.js` or read `ecosystem.config.js` for more information
 * Can run manually using this command as well `NITRO_PORT=8091 PROFILE=cloud NUXT_APP_BASE_URL=/cloud node .output/server/index.mjs`
 
 
