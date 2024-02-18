@@ -19,7 +19,7 @@
     "@aws-sdk/s3-request-presigner": "^3.514.0",
     "@mdi/font": "^7.2.96",
     "@pinia/nuxt": "^0.5.1",
-    "@pnfo/singlish-search": "^1.2.4",
+    "@pnfo/singlish-search": "^1.2.5",
     "pinia": "^2.1.7",
     "sass": "^1.63.6",
     "vkbeautify": "^0.99.3",
