@@ -33,7 +33,7 @@ async function downloadFile(pdfFilePath, Key) {
     });
 }
 
-async function recompute(file, recomputeAll) {
+async function recompute(file, genThumbAnyway) {
     const pdfFilePath = path.join(downloadFolder, file.Key), pdfFolderPath = path.join(downloadFolder, file.prefix)
     let fileDownloaded = false
     // download the file from s3 if not exists or if the sizes differ
@@ -52,7 +52,7 @@ async function recompute(file, recomputeAll) {
     }
 
     if (file.type != 'pdf') return
-    if (!fileDownloaded && !recomputeAll) {
+    if (!fileDownloaded && !genThumbAnyway) {
         console.log(`files ${file.id} already exists. not recomputing`)
         return
     }
@@ -87,21 +87,21 @@ async function recompute(file, recomputeAll) {
     await Promise.all(uploadPromises)
 }
 
-async function recomputeThumbnails(startId, endId = 0, recomputeAll = false) {
+async function recomputeThumbnails(startId, endId = 0, genThumbAnyway = false) {
     if (!endId) endId = startId
     const files = await sh.list('', true)
     const selected = files.filter(({id}) => id >= startId && id <= endId)
     for (const file of selected) {
-        await recompute(file, recomputeAll)
+        await recompute(file, genThumbAnyway)
     }
     console.log(`finished for ${selected.length} files`)
 }
 
 /**
  * download and sync files that do not exist in the local directory
- * if a file is downloaded compute the thumb photos, if the recomputeAll is true compute even if not downloaded
+ * if a file is downloaded compute the thumb photos, if the genThumbAnyway is true compute even if not downloaded
  * some thumbs have been manually edited to remove whitespace, so recompute only the new pdfs
  * startId and endId are inclusive
  * note: have to comment out import settings line in utils
  **/
-recomputeThumbnails(1011, 1047, false)
+recomputeThumbnails(1073, 1118, false)
