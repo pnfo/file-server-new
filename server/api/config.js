@@ -5,7 +5,7 @@ import vkb from 'vkbeautify'
 export default defineEventHandler(async (event) => {
     const indexH = useNitroApp().indexHandler, query = getQuery(event)
     try {
-        
+
         if (query.command == 'reload') {
             console.log(`received config request with command ${query.command}`)
             if (query.password != password) {
@@ -16,9 +16,9 @@ export default defineEventHandler(async (event) => {
             console.log(`index reloaded with stats: ${statsStr}`)
         }
         // return the config and stats
-        return {config: indexH.config, indexStats: indexH.indexStats}
+        return { config: indexH.config, indexStats: indexH.indexStats }
 
-    } catch(err) {
-        return { errorMessage: err }
+    } catch (err) {
+        return { errorMessage: err.message || err.toString() }
     }
 })

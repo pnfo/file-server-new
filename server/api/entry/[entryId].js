@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
         return { type: 'coll', entries, folder }
 
     } catch (err) {
-        return { errorMessage: err }
+        return { errorMessage: err.message || err.toString() }
     }
     // //return await useStorage().getItem(`assets/library/library-config.json`)
 })
