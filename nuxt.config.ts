@@ -33,5 +33,17 @@ export default defineNuxtConfig({
       dir: 'output',
     },
   },
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  features: {
+    inlineStyles: false
+  },
+  sourcemap: {
+    server: false,
+    client: false
+  },
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1000
+    }
+  }
 })

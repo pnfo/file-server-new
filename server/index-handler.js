@@ -152,12 +152,14 @@ export class IndexHandler {
     async readStream(key) {
         return this.s3Hander.readFile(key)
     }
-    async getSignedUrl(key, expiresIn) {
+    async getSignedUrl(key, expiresIn, options = {}) {
         // introduce a cache since there are lot of duplicate requests in quick succession - suspect OOM error due to urlsigning
-        if (this.signedUrlCache[key] && this.signedUrlCache[key].expireTime > fromNowTs(10)) // expire more than 10 secs from now
-            return this.signedUrlCache[key].url
-        const url = this.s3Hander.getSignedUrl(key, expiresIn), expireTime = fromNowTs(expiresIn)
-        this.signedUrlCache[key] = {url, expireTime}
+        const cacheKey = options.contentDisposition ? `${key}_${options.contentDisposition}` : key
+        if (this.signedUrlCache[cacheKey] && this.signedUrlCache[cacheKey].expireTime > fromNowTs(10)) // expire more than 10 secs from now
+            return this.signedUrlCache[cacheKey].url
+        const url = await this.s3Hander.getSignedUrl(key, expiresIn, options)
+        const expireTime = fromNowTs(expiresIn)
+        this.signedUrlCache[cacheKey] = {url, expireTime}
         return url
     }
 }

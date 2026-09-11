@@ -89,8 +89,15 @@ export class S3Handler {
         await this.s3.send(new PutObjectCommand(uploadParams));
     }
 
-    async getSignedUrl(key, expiresIn) {
-        const command = new GetObjectCommand({ Bucket: this.bucketName, Key: this.addRoot(key) });
+    async getSignedUrl(key, expiresIn, options = {}) {
+        const commandParams = { Bucket: this.bucketName, Key: this.addRoot(key) };
+        if (options.contentDisposition) {
+            commandParams.ResponseContentDisposition = options.contentDisposition;
+        }
+        if (options.contentType) {
+            commandParams.ResponseContentType = options.contentType;
+        }
+        const command = new GetObjectCommand(commandParams);
         return getSignedUrl(this.s3, command, { expiresIn });
     }
 

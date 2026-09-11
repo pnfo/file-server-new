@@ -33,7 +33,7 @@ function getThumbImage(index) {
 
         <v-row v-if="file.type == 'mp3' || file.type == 'm4a'" dense>
             <v-col cols="12">
-                <audio controls :src="downloadLink" preload="auto">
+                <audio controls :src="downloadLink + '?inline=1'" preload="auto">
                     ඔබගේ අතිරික්සුව (browser) <code>audio</code> අංගය සඳහා සහාය නොදක්වයි.
                 </audio>
             </v-col>
@@ -59,7 +59,7 @@ function getThumbImage(index) {
 
         <v-row >
             <v-col cols="12" sm="6">
-                <v-btn size="large" color="success" :href="downloadLink" variant="flat" prepend-icon="mdi-download" nuxt>
+                <v-btn size="large" color="success" :href="downloadLink" variant="flat" prepend-icon="mdi-download">
                     {{ typeInfo.downloadText }}
                 </v-btn>
             </v-col>
