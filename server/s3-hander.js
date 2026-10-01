@@ -45,6 +45,18 @@ export class S3Handler {
             }).filter(({id}) => id) // entries without ids ignored
     }
       
+    async getSignedUrl(key, expiresIn = 3600, disposition = null) {
+        const commandParams = {
+            Bucket: this.bucketName,
+            Key: this.addRoot(key)
+        }
+        if (disposition) {
+            commandParams.ResponseContentDisposition = disposition
+        }
+        const command = new GetObjectCommand(commandParams)
+        return getSignedUrl(this.s3, command, { expiresIn })
+    }
+
     async readFile(key) {
         const command = new GetObjectCommand({
             Bucket: this.bucketName,
@@ -52,6 +64,25 @@ export class S3Handler {
         })
         const { Body } = await this.s3.send(command)
         return Body
+    }
+
+    async getObjectStream(key, range) {
+        const commandParams = {
+            Bucket: this.bucketName,
+            Key: this.addRoot(key)
+        }
+        if (range) {
+            commandParams.Range = range
+        }
+        const res = await this.s3.send(new GetObjectCommand(commandParams))
+        return {
+            stream: res.Body,
+            contentLength: res.ContentLength,
+            contentRange: res.ContentRange,
+            contentType: res.ContentType,
+            acceptRanges: res.AcceptRanges,
+            isPartial: Boolean(range && res.ContentRange)
+        }
     }
 
     async exists(key) {
@@ -87,18 +118,6 @@ export class S3Handler {
         uploadParams.Key = this.addRoot(uploadParams.Key)
         uploadParams.Bucket = this.bucketName
         await this.s3.send(new PutObjectCommand(uploadParams));
-    }
-
-    async getSignedUrl(key, expiresIn, options = {}) {
-        const commandParams = { Bucket: this.bucketName, Key: this.addRoot(key) };
-        if (options.contentDisposition) {
-            commandParams.ResponseContentDisposition = options.contentDisposition;
-        }
-        if (options.contentType) {
-            commandParams.ResponseContentType = options.contentType;
-        }
-        const command = new GetObjectCommand(commandParams);
-        return getSignedUrl(this.s3, command, { expiresIn });
     }
 
     // public url https://tipitaka.sgp1.digitaloceanspaces.com/Key

@@ -22,7 +22,6 @@ function generateParents(prefix) {
     const parts = prefix.split('/')
     return parts.map((p, i) => ({...parseFileName(p), Key: parts.slice(0, i + 1).join('/')}))
 }
-const fromNowTs = (seconds) => Date.now() + seconds * 1000
 
 // todo: this whole memory check might not be necessary now that the memory leak is fixed after updating the node version and vuetify
 const memoryThreshold = 300, memoryCheckInterval = 5 // in MB and seconds
@@ -50,7 +49,6 @@ export class IndexHandler {
         this.indexLoaded = false
         this.idInfoLastWrite = Date.now()
         this.indexStats = { numFiles: 0, numFolders: 0 }
-        this.signedUrlCache = {}
         setInterval(() => checkMemory(this), memoryCheckInterval * 1000)
     }
 
@@ -149,17 +147,13 @@ export class IndexHandler {
         const regexp = new RegExp(queryTerms.map(q => escapeRegExp(q)).join('|'))
         return this.getAll(entryId).filter(({name}) => regexp.test(name)).slice(0, maxResults)
     }
+    async getSignedUrl(key, expiresIn = 3600, disposition = null) {
+        return this.s3Hander.getSignedUrl(key, expiresIn, disposition)
+    }
     async readStream(key) {
         return this.s3Hander.readFile(key)
     }
-    async getSignedUrl(key, expiresIn, options = {}) {
-        // introduce a cache since there are lot of duplicate requests in quick succession - suspect OOM error due to urlsigning
-        const cacheKey = options.contentDisposition ? `${key}_${options.contentDisposition}` : key
-        if (this.signedUrlCache[cacheKey] && this.signedUrlCache[cacheKey].expireTime > fromNowTs(10)) // expire more than 10 secs from now
-            return this.signedUrlCache[cacheKey].url
-        const url = await this.s3Hander.getSignedUrl(key, expiresIn, options)
-        const expireTime = fromNowTs(expiresIn)
-        this.signedUrlCache[cacheKey] = {url, expireTime}
-        return url
+    async getFileStream(file, range) {
+        return this.s3Hander.getObjectStream(file.Key, range)
     }
 }
